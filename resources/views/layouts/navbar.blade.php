@@ -30,6 +30,14 @@
           </a>
         </li>
 
+         {{-- Menu Jenis Makanan --}}
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('jenis-makanan*') ? 'active-cream' : '' }}" href="{{ route('jenis-makanan.index') }}" style="color: #5C4D42 !important;">
+            <i class="bi bi-egg-fried"></i>
+            <span>Jenis</span>
+          </a>
+        </li>
+
         {{-- Menu Produk --}}
         <li class="nav-item">
           <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('produk*') ? 'active-cream' : '' }}" href="{{ route('produk.index') }}" style="color: #5C4D42 !important;">
@@ -43,14 +51,6 @@
           <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('penjualan*') ? 'active-cream' : '' }}" href="{{ route('penjualan.index') }}" style="color: #5C4D42 !important;">
             <i class="bi bi-cart3"></i>
             <span>Penjualan</span>
-          </a>
-        </li>
-
-        {{-- Menu Jenis Makanan --}}
-        <li class="nav-item">
-          <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('jenis-makanan*') ? 'active-cream' : '' }}" href="{{ route('jenis-makanan.index') }}" style="color: #5C4D42 !important;">
-            <i class="bi bi-egg-fried"></i>
-            <span>Jenis</span>
           </a>
         </li>
 
