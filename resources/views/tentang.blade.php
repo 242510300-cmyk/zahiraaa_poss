@@ -97,7 +97,7 @@ body { background-color: #fff8ed; }
         <div class="profile-header">
             {{-- Foto Profil dengan Fallback UI Avatars jika file tidak ditemukan --}}
             <img 
-                src="{{ asset('images/foto-profil.jpg') }}" 
+                src="{{ asset('images/mimil.jpg') }}" 
                 alt="Foto Profil" 
                 class="profile-photo"
                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Milan+Zhahira&background=8b5e34&color=ffffff&size=128';"
