@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -9,6 +8,15 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JenisMakananController;
+
+/*
+|--------------------------------------------------------------------------
+| Halaman Publik
+|--------------------------------------------------------------------------
+*/
+Route::get('/tentang', function () {
+    return view('tentang');
+})->name('tentang');
 
 /*
 |--------------------------------------------------------------------------
@@ -31,10 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Halaman Tentang
-    Route::get('/tentang', function () {
-        return view('tentang');
-    })->name('tentang');
+    // Halaman Profile
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
 
     // Group khusus Role Admin
     Route::middleware('role:admin')
@@ -59,7 +67,7 @@ Route::middleware('auth')->group(function () {
 
         // Custom route untuk cetak struk transaksi
         Route::get('/penjualan/{penjualan}/struk', [PenjualanController::class, 'struk'])->name('penjualan.struk');
-        
+
         Route::resource('penjualan', PenjualanController::class);
         Route::resource('itempenjualan', ItemPenjualanController::class);
     });

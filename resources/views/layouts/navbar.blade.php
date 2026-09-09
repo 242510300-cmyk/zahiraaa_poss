@@ -54,13 +54,21 @@
           </a>
         </li>
 
-        {{-- Menu Tentang --}}
+        {{-- Menu profile --}}
         <li class="nav-item">
-          <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('tentang*') ? 'active-cream' : '' }}" href="{{ route('tentang') }}" style="color: #5C4D42 !important;">
+          <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('profile*') ? 'active-cream' : '' }}" href="{{ route('profile') }}" style="color: #5C4D42 !important;">
             <i class="bi bi-info-circle"></i>
-            <span>Tentang</span>
+            <span>Profile</span>
           </a>
         </li>
+
+        {{-- Menu Tentang --}}
+        <li class="nav-item">
+         <a class="nav-link px-3 py-2 rounded-3 text-dark font-medium d-inline-flex align-items-center gap-2 {{ Request::is('tentang*') ? 'active-cream' : '' }}" href="{{ route('tentang') }}" style="color: #5C4D42 !important;">
+           <i class="bi bi-info-square"></i>
+           <span>Tentang</span>
+         </a>
+      </li>
       </ul>
 
       {{-- Form Logout --}}
