@@ -130,6 +130,26 @@
             color: #2e7d32;
             font-size: 1.8rem;
         }
+        .payment-summary {
+            margin-top: 12px;
+            padding: 16px 24px;
+            border: 1px solid #f3dfbd;
+            border-radius: 14px;
+        }
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 6px 0;
+            color: #6b4226;
+        }
+        .payment-row.change {
+            border-top: 1px dashed #f0d9ad;
+            margin-top: 6px;
+            padding-top: 12px;
+            font-weight: 800;
+            color: #2e7d32;
+        }
         .footer-note {
             text-align: center;
             font-size: 0.9rem;
@@ -189,7 +209,7 @@
         <div class="receipt-card">
             <div class="text-center">
                 <div class="store-icon">🧾</div>
-                <div class="store-name">MILAN POS</div>
+                <div class="store-name">MILAN MART</div>
                 <div class="store-tagline">Terima kasih telah berbelanja</div>
             </div>
 
@@ -243,6 +263,17 @@
             <div class="total-box">
                 <span class="total-label">TOTAL PEMBAYARAN</span>
                 <span class="total-amount">Rp {{ number_format($penjualan->total_pembayaran ?? 0, 0, ',', '.') }}</span>
+            </div>
+
+            <div class="payment-summary">
+                <div class="payment-row">
+                    <span>Uang Dibayar</span>
+                    <strong>Rp {{ number_format($penjualan->uang_dibayar ?? $penjualan->total_pembayaran ?? 0, 0, ',', '.') }}</strong>
+                </div>
+                <div class="payment-row change">
+                    <span>Kembalian</span>
+                    <strong>Rp {{ number_format($penjualan->kembalian ?? 0, 0, ',', '.') }}</strong>
+                </div>
             </div>
 
             <div class="footer-note">

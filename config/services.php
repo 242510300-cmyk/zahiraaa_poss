@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'qris' => [
+        'payload' => env('QRIS_PAYLOAD', 'QRIS-ZAHIRAAA'),
+    ],
+
 ];

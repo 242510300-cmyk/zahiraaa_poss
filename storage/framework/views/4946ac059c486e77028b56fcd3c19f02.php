@@ -89,6 +89,15 @@
     select.form-select {
         border: 1px solid #d8c3a5;
     }
+
+    .qris-code {
+        width: 180px;
+        height: 180px;
+        object-fit: contain;
+        background: #fff;
+        border: 8px solid #fff;
+        border-radius: 8px;
+    }
 </style>
 
 
@@ -100,10 +109,13 @@
     </div>
 <?php endif; ?>
 
-<?php if(session('errors')): ?>
+<?php if($errors->any()): ?>
     <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
-        <?php echo e(session('errors')); ?>
-
+        <ul class="mb-0 ps-3">
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </ul>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php endif; ?>      
@@ -269,6 +281,7 @@
 
             
             <div class="card-footer pos-footer p-3">
+                <?php ($totalBelanja = $sale->itemPenjualan->sum('subtotal')); ?>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="fs-5 fw-bold total-bayar-label">Total Bayar:</span>
                     <span class="fs-4 fw-bold total-bayar-value">
@@ -285,16 +298,91 @@
                     <?php echo method_field('PUT'); ?>
 
                     <div class="mb-3">
-                        <select name="payment_method" class="form-select" required <?php echo e($sale->status === 'COMPLETED' ? 'disabled' : ''); ?>>
+                        <label for="payment_method" class="form-label fw-semibold">Metode Pembayaran</label>
+                        <select name="payment_method" id="payment_method" class="form-select" required <?php echo e($sale->status === 'COMPLETED' ? 'disabled' : ''); ?>>
                             <option value="">-- Pilih Metode Pembayaran --</option>
-                            <option value="CASH">Cash (Tunai)</option>
+                            <option value="CASH" <?php echo e(old('payment_method', $sale->metode_pembayaran) === 'CASH' ? 'selected' : ''); ?>>Cash (Tunai)</option>
+                            <option value="QRIS" <?php echo e(old('payment_method', $sale->metode_pembayaran) === 'QRIS' ? 'selected' : ''); ?>>QRIS</option>
                         </select>
+                    </div>
+
+                    <div class="mb-3" id="uang-dibayar-wrapper">
+                        <label for="uang_dibayar" class="form-label fw-semibold">Uang Dibayar</label>
+                        <input
+                            type="number"
+                            name="uang_dibayar"
+                            id="uang_dibayar"
+                            class="form-control"
+                            min="<?php echo e($totalBelanja); ?>"
+                            value="<?php echo e(old('uang_dibayar', $sale->uang_dibayar ?? $totalBelanja)); ?>"
+                            required
+                            <?php echo e($sale->status === 'COMPLETED' ? 'readonly' : ''); ?>
+
+                        >
+                        <?php $__errorArgs = ['uang_dibayar'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="text-danger small mt-1"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <div class="alert alert-info py-2 d-none" id="qris-info">
+                        <i class="bi bi-qr-code me-1"></i>
+                        Pembayaran QRIS harus diselesaikan sesuai total transaksi.
+                        <div class="text-center mt-2">
+                            <img
+                                class="qris-code"
+                                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=<?php echo e(urlencode(config('services.qris.payload'))); ?>"
+                                alt="Barcode QRIS Zahira"
+                            >
+                            <div class="small text-muted mt-1">Scan barcode untuk membayar melalui QRIS</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold total-bayar-label">Kembalian:</span>
+                        <span class="fw-bold text-success" id="kembalian">
+                            Rp <?php echo e(number_format($sale->kembalian ?? 0, 0, ',', '.')); ?>
+
+                        </span>
                     </div>
 
                     <button type="submit" class="btn btn-checkout w-100 fw-bold py-2 <?php echo e($sale->status === 'COMPLETED' ? 'disabled' : ''); ?>">
                         <i class="bi bi-check-circle me-1"></i> Checkout Sekarang
                     </button>
                 </form>
+
+                <script>
+                    const uangDibayar = document.getElementById('uang_dibayar');
+                    const kembalian = document.getElementById('kembalian');
+                    const paymentMethod = document.getElementById('payment_method');
+                    const uangDibayarWrapper = document.getElementById('uang-dibayar-wrapper');
+                    const qrisInfo = document.getElementById('qris-info');
+                    const totalBelanja = <?php echo e($totalBelanja); ?>;
+
+                    function updatePaymentFields() {
+                        const isQris = paymentMethod.value === 'QRIS';
+                        uangDibayarWrapper.classList.toggle('d-none', isQris);
+                        qrisInfo.classList.toggle('d-none', !isQris);
+                        uangDibayar.required = !isQris;
+                        uangDibayar.disabled = isQris;
+                        kembalian.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(
+                            isQris ? 0 : Math.max((Number(uangDibayar.value) || 0) - totalBelanja, 0)
+                        );
+                    }
+
+                    uangDibayar?.addEventListener('input', function () {
+                        const nilaiKembalian = Math.max((Number(this.value) || 0) - totalBelanja, 0);
+                        kembalian.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(nilaiKembalian);
+                    });
+                    paymentMethod?.addEventListener('change', updatePaymentFields);
+                    updatePaymentFields();
+                </script>
 
                 
                 <?php if($sale->status !== 'COMPLETED'): ?>

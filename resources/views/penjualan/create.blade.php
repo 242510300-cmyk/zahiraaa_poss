@@ -72,6 +72,28 @@
         background-color: #256428;
         color: #fff;
     }
+
+    #qris-preview {
+        display: none;
+        text-align: center;
+        margin-bottom: 1rem;
+        padding: 12px;
+        border: 1px solid #d8c3a5;
+        border-radius: 10px;
+        background-color: #fffdf9;
+    }
+
+    #qris-preview img {
+        max-width: 200px;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    #qris-preview p {
+        margin: 6px 0 0;
+        font-size: 13px;
+        color: #6f4e37;
+    }
 </style>
 
 <div class="container my-4">
@@ -181,7 +203,16 @@
                             Cash
                         </option>
 
+                        <option value="qris">
+                            QRIS
+                        </option>
+
                     </select>
+
+                    <div id="qris-preview">
+                        <img src="{{ asset('images/qris.png') }}" alt="Kode QRIS">
+                        <p>Scan kode QRIS di atas untuk menyelesaikan pembayaran</p>
+                    </div>
 
                     <button class="btn btn-checkout w-100">
                         Checkout
@@ -306,6 +337,11 @@ function hapus(index){
 cart.splice(index,1);
 render();
 }
+
+document.getElementById('metode-pembayaran').addEventListener('change', function(){
+    document.getElementById('qris-preview').style.display =
+        this.value === 'qris' ? 'block' : 'none';
+});
 
 </script>
 

@@ -67,6 +67,13 @@ body {
 .table-items tbody td {
     border-color: #f3dfbd;
 }
+.qris-code {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border: 8px solid #fff;
+    border-radius: 8px;
+}
 </style>
 
 <div class="container my-4">
@@ -126,6 +133,30 @@ body {
 
                     </span>
                 </div>
+                <div class="col-md-4 mb-2">
+                    <small class="text-muted d-block">Uang Dibayar</small>
+                    <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+                        Rp <?php echo e(number_format($penjualan->uang_dibayar ?? 0, 0, ',', '.')); ?>
+
+                    </span>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <small class="text-muted d-block">Kembalian</small>
+                    <span class="fw-bold text-success" style="font-size: 1.1rem;">
+                        Rp <?php echo e(number_format($penjualan->kembalian ?? 0, 0, ',', '.')); ?>
+
+                    </span>
+                </div>
+                <?php if($penjualan->metode_pembayaran === 'QRIS'): ?>
+                    <div class="col-md-12 mt-3 text-center">
+                        <small class="text-muted d-block mb-2">Barcode Pembayaran QRIS</small>
+                        <img
+                            class="qris-code"
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=<?php echo e(urlencode(config('services.qris.payload'))); ?>"
+                            alt="Barcode QRIS transaksi #<?php echo e($penjualan->id); ?>"
+                        >
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

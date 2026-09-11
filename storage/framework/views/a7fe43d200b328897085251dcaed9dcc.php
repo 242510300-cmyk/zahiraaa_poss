@@ -119,6 +119,7 @@ body {
     background: #b8862c;
     color: white;
 }
+
 </style>
 
 <div class="container my-4">
@@ -165,6 +166,7 @@ body {
                             <th>Tanggal</th>
                             <th>Kasir</th>
                             <th>Total Bayar</th>
+                            <th>Kembalian</th>
                             <th>Metode</th>
                             <th>Status</th>
                             <th class="text-center" width="120">Aksi</th>
@@ -206,6 +208,13 @@ body {
                             </td>
 
                             <td>
+                                <span class="fw-bold text-primary">
+                                    Rp <?php echo e(number_format($item->kembalian ?? 0, 0, ',', '.')); ?>
+
+                                </span>
+                            </td>
+
+                            <td>
                                 <span class="badge-payment">
                                     <i class="bi bi-credit-card me-1"></i>
                                     <?php echo e(strtoupper($item->metode_pembayaran ?? 'Cash')); ?>
@@ -235,7 +244,7 @@ body {
                         </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
+                            <td colspan="9" class="text-center py-5 text-muted">
                                 <i class="bi bi-receipt fs-1 d-block mb-2" style="color: #d9a441;"></i>
                                 Belum ada data transaksi penjualan.
                             </td>

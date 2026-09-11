@@ -132,7 +132,7 @@ body {
         {{-- Card: Today's Sales --}}
         <div class="col-md-6">
             <div class="card-custom h-100">
-                <h5 class="section-title">Today's Sales</h5>
+                <h5 class="section-title">Penjualan Hari Ini</h5>
                 <p class="text-muted small mb-3">Total penjualan dan transaksi hari ini</p>
 
                 <div class="d-flex align-items-center mb-3">
@@ -164,7 +164,7 @@ body {
         {{-- Card: Cash & Payment Status --}}
         <div class="col-md-6">
             <div class="card-custom h-100">
-                <h5 class="section-title">Cash & Payment Status</h5>
+                <h5 class="section-title">Status Tunai & Pembayaran</h5>
                 <p class="text-muted small mb-3">Rincian metode pembayaran hari ini</p>
 
                 <div class="d-flex align-items-center mb-3">
@@ -200,7 +200,7 @@ body {
         {{-- Card: Critical Inventory Status --}}
         <div class="col-md-6">
             <div class="card-custom h-100">
-                <h5 class="section-title">Critical Inventory Status</h5>
+                <h5 class="section-title">Status Stok Kritis</h5>
                 <p class="text-muted small mb-3">Produk stok rendah & stok habis</p>
 
                 <div class="mb-3">
@@ -232,7 +232,7 @@ body {
         {{-- Card: Best Seller Product --}}
         <div class="col-md-6">
             <div class="card-custom h-100">
-                <h5 class="section-title">Best Seller Product</h5>
+                <h5 class="section-title">Produk Terlaris</h5>
                 <p class="text-muted small mb-3">Produk terlaris hari ini</p>
 
                 <div class="table-responsive">

@@ -187,7 +187,8 @@ class PenjualanController extends Controller
     public function update(Request $request, Penjualan $penjualan)
     {
         $request->validate([
-            'payment_method' => 'required|in:CASH,'
+            'payment_method' => 'required|in:CASH,QRIS',
+            'uang_dibayar' => 'nullable|integer|min:0',
         ]);
 
         if ($penjualan->status !== 'OPEN') {
@@ -200,10 +201,21 @@ class PenjualanController extends Controller
 
         DB::transaction(function () use ($penjualan, $request) {
             $total = $penjualan->itemPenjualan()->sum('subtotal');
+            $uangDibayar = $request->payment_method === 'QRIS'
+                ? $total
+                : (int) $request->input('uang_dibayar');
+
+            if ($request->payment_method === 'CASH' && $uangDibayar < $total) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'uang_dibayar' => 'Uang dibayar harus minimal sebesar total pembayaran.',
+                ]);
+            }
 
             $penjualan->update([
                 'metode_pembayaran' => $request->payment_method,
                 'total_pembayaran'  => $total,
+                'uang_dibayar'      => $uangDibayar,
+                'kembalian'         => $uangDibayar - $total,
                 'status'            => 'COMPLETED'
             ]);
         });
